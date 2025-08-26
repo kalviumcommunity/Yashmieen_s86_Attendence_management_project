@@ -1,31 +1,31 @@
 package com.school;
 
 public class Main {
- public static void main(String[] args) {
- System.out.println("--- School Attendance System ---");
+    public static void main(String[] args) {
+        Student[] students = new Student[4];
+        Course[] courses = new Course[3];
 
- Student[] students = new Student[2];
- students[0] = new Student();
- students[0].setDetails(1, "Alice Wonderland");
- students[1] = new Student();
- students[1].setDetails(2, "Bob The Builder");
+        // Create students using constructor
+        students[0] = new Student("Alice");
+        students[1] = new Student("Bob");
+        students[2] = new Student("Charlie");
+        students[3] = new Student("Diana");
 
- Course[] courses = new Course[2];
- courses[0] = new Course();
- courses[0].setDetails("CS101", "Intro to Programming");
- courses[1] = new Course();
- courses[1].setDetails("MA202", "Linear Algebra");
+        // Create courses using constructor
+        courses[0] = new Course("Mathematics");
+        courses[1] = new Course("Physics");
+        courses[2] = new Course("Chemistry");
 
- System.out.println("\nRegistered Students:");
- for (Student student : students) {
- if (student != null) student.displayDetails();
- }
+        System.out.println("----- Student Details -----");
+        for (Student s : students) {
+            s.displayDetails();
+            System.out.println();
+        }
 
- System.out.println("\nAvailable Courses:");
- for (Course course : courses) {
- if (course != null) course.displayDetails();
- }
-
- System.out.println("\nSession 2: Core Domain Modelling Complete.");
- }
+        System.out.println("----- Course Details -----");
+        for (Course c : courses) {
+            c.displayDetails();
+            System.out.println();
+        }
+    }
 }
