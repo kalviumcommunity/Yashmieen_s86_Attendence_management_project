@@ -10,6 +10,15 @@ public class Course {
         this.courseName = courseName;
     }
 
+    // Getters for encapsulation
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
     public void displayDetails() {
         System.out.println("Course ID: C" + this.courseId);
         System.out.println("Course Name: " + this.courseName);
