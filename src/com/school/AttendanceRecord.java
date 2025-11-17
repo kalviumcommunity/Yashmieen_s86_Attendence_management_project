@@ -1,13 +1,22 @@
 package com.school;
 
 public class AttendanceRecord implements Storable {
-    private int studentId;
-    private int courseId;
+    private Student student;
+    private Course course;
     private String status;
 
-    public AttendanceRecord(int studentId, int courseId, String status) {
-        this.studentId = studentId;
-        this.courseId = courseId;
+    /**
+     * Constructor for AttendanceRecord
+     * Now holds Student and Course objects instead of just their IDs,
+     * enhancing the object-oriented nature of the design
+     * 
+     * @param student The Student object
+     * @param course  The Course object
+     * @param status  The attendance status ("Present" or "Absent")
+     */
+    public AttendanceRecord(Student student, Course course, String status) {
+        this.student = student;
+        this.course = course;
 
         // Validation
         if (status.equalsIgnoreCase("Present") || status.equalsIgnoreCase("Absent")) {
@@ -19,28 +28,31 @@ public class AttendanceRecord implements Storable {
     }
 
     // Getters
-    public int getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public int getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
     public String getStatus() {
         return status;
     }
 
-    // Display method
+    // Display method - now uses full object details for better reporting
     public void displayRecord() {
-        System.out.println("Student ID: " + studentId + " | Course ID: " + courseId + " | Status: " + status);
+        System.out.println("Student: " + student.getName() + " (ID: " + student.getId() + ") | " +
+                "Course: " + course.getCourseName() + " (ID: C" + course.getCourseId() + ") | " +
+                "Status: " + status);
     }
 
     /**
      * Convert AttendanceRecord to CSV format for storage
+     * Still uses IDs for simpler and more flexible file storage
      */
     @Override
     public String toDataString() {
-        return studentId + "," + courseId + "," + status;
+        return student.getId() + "," + course.getCourseId() + "," + status;
     }
 }

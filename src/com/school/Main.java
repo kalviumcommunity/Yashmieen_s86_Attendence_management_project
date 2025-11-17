@@ -4,6 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    /**
+     * Demonstrates polymorphism by displaying details of all people in the school
+     * directory.
+     * This method takes a List<Person> and calls displayDetails() on each person.
+     * The correct overridden method for each specific object type (Student,
+     * Teacher, Staff)
+     * is executed at runtime - this is runtime polymorphism in action.
+     * 
+     * @param people A list of Person objects (containing Student, Teacher, Staff
+     *               instances)
+     */
+    public static void displaySchoolDirectory(List<Person> people) {
+        System.out.println("===== SCHOOL DIRECTORY (Polymorphic Display) =====");
+        for (Person person : people) {
+            // The correct displayDetails() method is called based on the actual object type
+            person.displayDetails();
+            System.out.println();
+        }
+    }
+
     public static void main(String[] args) {
         Student[] students = new Student[4];
         Teacher[] teachers = new Teacher[2];
@@ -53,14 +73,36 @@ public class Main {
             System.out.println();
         }
 
+        // Demonstrate Polymorphism: Create a List<Person> containing different object
+        // types
+        List<Person> schoolDirectory = new ArrayList<>();
+
+        // Add students
+        for (Student s : students) {
+            schoolDirectory.add(s);
+        }
+
+        // Add teachers
+        for (Teacher t : teachers) {
+            schoolDirectory.add(t);
+        }
+
+        // Add staff members
+        for (Staff s : staffMembers) {
+            schoolDirectory.add(s);
+        }
+
+        // Call displaySchoolDirectory to show polymorphic behavior
+        displaySchoolDirectory(schoolDirectory);
+
         // Attendance Recording
         System.out.println("===== Attendance Records =====");
         List<AttendanceRecord> attendanceLog = new ArrayList<>();
 
-        // Updated to use inherited getId() method
-        attendanceLog.add(new AttendanceRecord(students[0].getId(), courses[0].getCourseId(), "Present"));
-        attendanceLog.add(new AttendanceRecord(students[1].getId(), courses[1].getCourseId(), "Absent"));
-        attendanceLog.add(new AttendanceRecord(students[2].getId(), courses[2].getCourseId(), "Late"));
+        // Updated to use Student and Course objects instead of just IDs
+        attendanceLog.add(new AttendanceRecord(students[0], courses[0], "Present"));
+        attendanceLog.add(new AttendanceRecord(students[1], courses[1], "Absent"));
+        attendanceLog.add(new AttendanceRecord(students[2], courses[2], "Present"));
 
         // Display attendance records
         for (AttendanceRecord record : attendanceLog) {
@@ -71,9 +113,13 @@ public class Main {
         System.out.println("\n===== File Storage & Persistence =====");
 
         // Create lists for storage
+        // Use instanceof and casting to filter only Student objects (which implement
+        // Storable)
         List<Storable> studentList = new ArrayList<>();
-        for (Student s : students) {
-            studentList.add(s);
+        for (Person person : schoolDirectory) {
+            if (person instanceof Student) {
+                studentList.add((Student) person);
+            }
         }
 
         List<Storable> courseList = new ArrayList<>();
