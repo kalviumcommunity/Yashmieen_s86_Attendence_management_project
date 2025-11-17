@@ -95,19 +95,48 @@ public class Main {
         // Call displaySchoolDirectory to show polymorphic behavior
         displaySchoolDirectory(schoolDirectory);
 
-        // Attendance Recording
-        System.out.println("===== Attendance Records =====");
-        List<AttendanceRecord> attendanceLog = new ArrayList<>();
+        // ===== Part 8: Attendance Service with Overloaded Methods =====
+        System.out.println("\n===== Part 8: Overloaded Commands - AttendanceService =====");
 
-        // Updated to use Student and Course objects instead of just IDs
-        attendanceLog.add(new AttendanceRecord(students[0], courses[0], "Present"));
-        attendanceLog.add(new AttendanceRecord(students[1], courses[1], "Absent"));
-        attendanceLog.add(new AttendanceRecord(students[2], courses[2], "Present"));
+        // Create AttendanceService to manage attendance records
+        AttendanceService attendanceService = new AttendanceService();
 
-        // Display attendance records
-        for (AttendanceRecord record : attendanceLog) {
-            record.displayRecord();
+        // Convert students array to list for lookups
+        List<Student> allStudents = new ArrayList<>();
+        for (Student s : students) {
+            allStudents.add(s);
         }
+
+        // Convert courses array to list for lookups
+        List<Course> allCourses = new ArrayList<>();
+        for (Course c : courses) {
+            allCourses.add(c);
+        }
+
+        System.out.println("\n----- Using Overloaded markAttendance (Version 1: Direct Objects) -----");
+        // Version 1: Using Student and Course objects directly
+        attendanceService.markAttendance(students[0], courses[0], "Present");
+        attendanceService.markAttendance(students[1], courses[1], "Absent");
+        attendanceService.markAttendance(students[2], courses[2], "Present");
+
+        System.out.println("\n----- Using Overloaded markAttendance (Version 2: ID Lookups) -----");
+        // Version 2: Using student and course IDs (performs lookups)
+        attendanceService.markAttendance(students[3].getId(), courses[0].getCourseId(), "Present",
+                allStudents, allCourses);
+        attendanceService.markAttendance(students[0].getId(), courses[1].getCourseId(), "Absent",
+                allStudents, allCourses);
+
+        System.out.println("\n----- Using Overloaded displayAttendanceLog (Version 1: All Records) -----");
+        // Version 1: Display all attendance records
+        attendanceService.displayAttendanceLog();
+
+        System.out.println("\n----- Using Overloaded displayAttendanceLog (Version 2: Filter by Student) -----");
+        // Version 2: Display records for a specific student using Streams
+        attendanceService.displayAttendanceLog(students[0]);
+
+        System.out.println("\n----- Using Overloaded displayAttendanceLog (Version 3: Filter by Course) -----");
+        // Version 3: Display records for a specific course using Streams
+        attendanceService.displayAttendanceLog(courses[0]);
 
         // Persistence: Save data to files
         System.out.println("\n===== File Storage & Persistence =====");
@@ -115,26 +144,24 @@ public class Main {
         // Create lists for storage
         // Use instanceof and casting to filter only Student objects (which implement
         // Storable)
-        List<Storable> studentList = new ArrayList<>();
+        List<Storable> storableStudentList = new ArrayList<>();
         for (Person person : schoolDirectory) {
             if (person instanceof Student) {
-                studentList.add((Student) person);
+                storableStudentList.add((Student) person);
             }
         }
 
-        List<Storable> courseList = new ArrayList<>();
+        List<Storable> storableCourseList = new ArrayList<>();
         for (Course c : courses) {
-            courseList.add(c);
+            storableCourseList.add(c);
         }
 
-        List<Storable> attendanceList = new ArrayList<>();
-        for (AttendanceRecord record : attendanceLog) {
-            attendanceList.add(record);
-        }
+        // Save attendance records from AttendanceService
+        List<Storable> attendanceList = new ArrayList<>(attendanceService.getAttendanceLog());
 
         // Save data to files using FileStorageService
-        FileStorageService.saveData(studentList, "students.txt");
-        FileStorageService.saveData(courseList, "courses.txt");
+        FileStorageService.saveData(storableStudentList, "students.txt");
+        FileStorageService.saveData(storableCourseList, "courses.txt");
         FileStorageService.saveData(attendanceList, "attendance_log.txt");
 
         System.out.println("\n✓ All data has been persisted to files successfully!");
