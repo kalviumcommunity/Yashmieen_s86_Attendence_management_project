@@ -4,7 +4,7 @@ package com.school;
  * Staff class extending Person
  * Represents non-teaching staff member in the school.
  */
-public class Staff extends Person {
+public class Staff extends Person implements Storable {
     private String role;
 
     /**
@@ -32,5 +32,10 @@ public class Staff extends Person {
         System.out.println("Staff ID: " + this.id);
         System.out.println("Name: " + this.name);
         System.out.println("Role: " + this.role);
+    }
+
+    @Override
+    public String toDataString() {
+        return id + "," + name + "," + role;
     }
 }

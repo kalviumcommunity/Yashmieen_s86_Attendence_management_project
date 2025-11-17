@@ -4,13 +4,13 @@ package com.school;
  * Teacher class extending Person
  * Represents a teaching staff member in the school.
  */
-public class Teacher extends Person {
+public class Teacher extends Person implements Storable {
     private String subjectTaught;
 
     /**
      * Constructor for Teacher class
      * 
-     * @param name The name of the teacher
+     * @param name          The name of the teacher
      * @param subjectTaught The subject taught by this teacher
      */
     public Teacher(String name, String subjectTaught) {
@@ -32,5 +32,10 @@ public class Teacher extends Person {
         System.out.println("Teacher ID: " + this.id);
         System.out.println("Name: " + this.name);
         System.out.println("Subject Taught: " + this.subjectTaught);
+    }
+
+    @Override
+    public String toDataString() {
+        return id + "," + name + "," + subjectTaught;
     }
 }

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
  */
 public class AttendanceService {
     private List<AttendanceRecord> attendanceLog;
+    private RegistrationService registrationService;
 
     /**
      * Constructor for AttendanceService
@@ -19,6 +20,15 @@ public class AttendanceService {
      */
     public AttendanceService() {
         this.attendanceLog = new ArrayList<>();
+        this.registrationService = null;
+    }
+
+    /**
+     * Construct AttendanceService with a RegistrationService dependency for lookups
+     */
+    public AttendanceService(RegistrationService registrationService) {
+        this.attendanceLog = new ArrayList<>();
+        this.registrationService = registrationService;
     }
 
     /**
@@ -61,19 +71,18 @@ public class AttendanceService {
      * @return true if attendance was marked successfully, false if student or
      *         course not found
      */
-    public boolean markAttendance(int studentId, int courseId, String status, List<Student> allStudents,
-            List<Course> allCourses) {
-        // Find the student by ID using streams
-        Student student = allStudents.stream()
-                .filter(s -> s.getId() == studentId)
-                .findFirst()
-                .orElse(null);
+    /**
+     * Lookup-based markAttendance that uses RegistrationService for lookups.
+     * Returns false if the registrationService is missing or lookups fail.
+     */
+    public boolean markAttendance(int studentId, int courseId, String status) {
+        if (this.registrationService == null) {
+            System.out.println("✗ Error: RegistrationService not configured for AttendanceService.");
+            return false;
+        }
 
-        // Find the course by ID using streams
-        Course course = allCourses.stream()
-                .filter(c -> c.getCourseId() == courseId)
-                .findFirst()
-                .orElse(null);
+        Student student = registrationService.findStudentById(studentId);
+        Course course = registrationService.findCourseById(courseId);
 
         if (student == null) {
             System.out.println("✗ Error: Student with ID " + studentId + " not found.");
@@ -85,7 +94,6 @@ public class AttendanceService {
             return false;
         }
 
-        // If both found, mark attendance using the first overloaded method
         markAttendance(student, course, status);
         return true;
     }
@@ -164,7 +172,9 @@ public class AttendanceService {
      * @param filename The name of the file to save to
      */
     public void saveAttendanceLog(String filename) {
-        List<Storable> storableList = new ArrayList<>(attendanceLog);
+        List<Storable> storableList = new ArrayList<>();
+        for (AttendanceRecord r : attendanceLog)
+            storableList.add(r);
         FileStorageService.saveData(storableList, filename);
     }
 }
