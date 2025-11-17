@@ -4,7 +4,7 @@ package com.school;
  * Student class extending Person
  * Represents a student in the school.
  */
-public class Student extends Person {
+public class Student extends Person implements Storable {
     private int gradeLevel;
 
     /**
@@ -36,5 +36,13 @@ public class Student extends Person {
         System.out.println("Student ID: " + this.id);
         System.out.println("Name: " + this.name);
         System.out.println("Grade Level: " + this.gradeLevel);
+    }
+
+    /**
+     * Convert Student to CSV format for storage
+     */
+    @Override
+    public String toDataString() {
+        return id + "," + name + "," + gradeLevel;
     }
 }

@@ -60,12 +60,37 @@ public class Main {
         // Updated to use inherited getId() method
         attendanceLog.add(new AttendanceRecord(students[0].getId(), courses[0].getCourseId(), "Present"));
         attendanceLog.add(new AttendanceRecord(students[1].getId(), courses[1].getCourseId(), "Absent"));
-        attendanceLog.add(new AttendanceRecord(students[2].getId(), courses[2].getCourseId(), "Late")); 
+        attendanceLog.add(new AttendanceRecord(students[2].getId(), courses[2].getCourseId(), "Late"));
 
         // Display attendance records
         for (AttendanceRecord record : attendanceLog) {
             record.displayRecord();
         }
+
+        // Persistence: Save data to files
+        System.out.println("\n===== File Storage & Persistence =====");
+
+        // Create lists for storage
+        List<Storable> studentList = new ArrayList<>();
+        for (Student s : students) {
+            studentList.add(s);
+        }
+
+        List<Storable> courseList = new ArrayList<>();
+        for (Course c : courses) {
+            courseList.add(c);
+        }
+
+        List<Storable> attendanceList = new ArrayList<>();
+        for (AttendanceRecord record : attendanceLog) {
+            attendanceList.add(record);
+        }
+
+        // Save data to files using FileStorageService
+        FileStorageService.saveData(studentList, "students.txt");
+        FileStorageService.saveData(courseList, "courses.txt");
+        FileStorageService.saveData(attendanceList, "attendance_log.txt");
+
+        System.out.println("\n✓ All data has been persisted to files successfully!");
     }
 }
-
