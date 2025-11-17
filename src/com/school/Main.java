@@ -49,13 +49,13 @@ public class Main {
         registrationService.registerStaff(st1);
         registrationService.registerStaff(st2);
 
-        // Create and register courses
-        Course c1 = new Course("Mathematics");
-        Course c2 = new Course("Physics");
-        Course c3 = new Course("Chemistry");
-        registrationService.registerCourse(c1);
-        registrationService.registerCourse(c2);
-        registrationService.registerCourse(c3);
+        // Create and register courses with capacity
+        // Mathematics course capacity 2
+        Course c1 = registrationService.createCourse("Mathematics", 2);
+        // Physics capacity 3
+        Course c2 = registrationService.createCourse("Physics", 3);
+        // Chemistry capacity 1
+        Course c3 = registrationService.createCourse("Chemistry", 1);
 
         // Display combined directory via RegistrationService
         displaySchoolDirectory(registrationService.getAllPeople());
@@ -92,6 +92,17 @@ public class Main {
 
         // Persistence: Save data to files
         System.out.println("\n===== File Storage & Persistence =====");
+        // ===== Part 10: Course capacity and enrollment demo =====
+        System.out.println("\n===== Part 10: Course Capacity & Enrollment Demo =====");
+
+        // Attempt to enroll students into Mathematics (capacity 2)
+        registrationService.enrollStudentInCourse(s1, c1); // should succeed
+        registrationService.enrollStudentInCourse(s2, c1); // should succeed
+        registrationService.enrollStudentInCourse(s3, c1); // should fail - capacity reached
+
+        // Show updated course info
+        System.out.println();
+        c1.displayDetails();
 
         // Save registered entities using RegistrationService
         registrationService.saveStudents("students.txt");
